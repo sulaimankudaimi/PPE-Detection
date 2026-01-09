@@ -70,7 +70,7 @@
     "# تحميل الموديل (تم استخدام ملف best.pt الخاص بك)\n",
     "@st.cache_resource\n",
     "def load_model():\n",
-    "    return YOLO(\"weights/best.pt\")\n",
+    "    return YOLO(\"best.pt\")\n",
     "\n",
     "model = load_model()\n",
     "\n",
