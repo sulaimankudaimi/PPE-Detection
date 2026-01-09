@@ -1,49 +1,65 @@
 import streamlit as st
 from ultralytics import YOLO
+from PIL import Image
 import cv2
 import numpy as np
-from PIL import Image
 
-# 1. إعداد الصفحة
-st.set_page_config(page_title="SafeDrill AI - PPE", page_icon="🏗️", layout="wide")
+# --- Page Configuration ---
+st.set_page_config(page_title="SafeDrill AI Pro", layout="wide")
 
-# 2. تصميم CSS للأناقة الاحترافية
+# --- Sidebar (Your Name on the Side) ---
+with st.sidebar:
+    st.title("Developer Info")
+    st.write("---")
+    st.subheader("Eng. Sulaiman")
+    st.info("Industrial AI Specialist - SPC")
+    st.write("---")
+    st.success("YOLOv8 Model Loaded Successfully")
+
+# --- Main Interface (English) ---
+st.title("SafeDrill AI Pro: Smart Safety Monitoring System")
+st.write("Ensuring a safer environment at the drilling sites.")
+
+# Load Model
+model = YOLO("best.pt")
+
+# Options
+option = st.radio("Choose Detection Method:", ("Upload Image", "Use Camera"))
+
+if option == "Upload Image":
+    img_file = st.file_uploader("Upload site image for AI scanning", type=['jpg', 'png', 'jpeg'])
+    if img_file:
+        img = Image.open(img_file)
+        results = model(img)
+        # Draw bounding boxes
+        res_plotted = results[0].plot()
+        st.image(res_plotted, caption="AI Detection Results", use_column_width=True)
+        st.success(f"Detected: {len(results[0].boxes)} safety elements.")
+
+elif option == "Use Camera":
+    img_file = st.camera_input("Take a photo for instant inspection")
+    if img_file:
+        img = Image.open(img_file)
+        results = model(img)
+        res_plotted = results[0].plot()
+        st.image(res_plotted, caption="Real-time Inspection Result")
+
+# --- Footer (Your Name at the Bottom) ---
 st.markdown("""
     <style>
-    .main { background-color: #f0f2f6; }
-    .stTitle { color: #1e3a8a; text-align: center; }
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: transparent;
+        color: grey;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+    }
     </style>
+    <div class="footer">
+        <p>Developed by: Eng. Sulaiman | SPC Safety Solutions © 2026</p>
+    </div>
     """, unsafe_allow_html=True)
-
-st.title("🏗️ SafeDrill AI Pro: نظام مراقبة السلامة الذكي")
-
-# 3. تحميل الموديل (تأكد أن best.pt بجانب هذا الملف في GitHub)
-@st.cache_resource
-def load_model():
-    return YOLO("best.pt")
-
-try:
-    model = load_model()
-    st.sidebar.success("✅ تم تحميل موديل YOLO بنجاح")
-except Exception as e:
-    st.sidebar.error(f"❌ خطأ في تحميل الموديل: {e}")
-
-# 4. واجهة رفع الصور والتحليل
-uploaded_file = st.file_uploader("ارفع صورة الموقع للفحص الذكي", type=['jpg', 'jpeg', 'png'])
-
-if uploaded_file:
-    image = Image.open(uploaded_file)
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.image(image, caption="الصورة الأصلية", use_container_width=True)
-    
-    with col2:
-        # تنفيذ التنبؤ
-        results = model.predict(source=image, conf=0.45)
-        res_plotted = results[0].plot()
-        st.image(res_plotted, caption="نتائج الفحص الذكي", use_container_width=True)
-        
-        # عرض عدد المخالفات/العناصر
-        count = len(results[0].boxes)
-        st.info(f"تم اكتشاف {count} عناصر في الصورة.")
