@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 # --- Page Configuration ---
-st.set_page_config(page_title="SafeDrill AI Pro", layout="wide")
+st.set_page_config(page_title="PPE Detection", layout="wide")
 
 # --- Sidebar (Your Full Name) ---
 with st.sidebar:
@@ -17,7 +17,7 @@ with st.sidebar:
     st.success("YOLOv8 Model Active")
 
 # --- Main Interface (English) ---
-st.title("SafeDrill AI Pro: Smart Safety Monitoring System")
+st.title("PPE Detection: Smart Safety Monitoring System")
 st.write("Professional Site Inspection & Safety Compliance")
 
 # Load Model
