@@ -1,0 +1,7 @@
+# قم بتعديل المسارات لتناسب جهازك
+names: [Hardhat, Mask, NO-Hardhat, NO-Mask, NO-Safety Vest, Person, Safety Cone, Safety Vest, machinery, vehicle]
+nc: 10
+# ضع المسارات الكاملة للمجلدات التي فككت ضغطها
+train: C:/Users/سكاي مارينا/Documents/archive/css-data/train
+val: C:/Users/سكاي مارينا/Documents/archive/css-data/valid
+test: C:/Users/سكاي مارينا/Documents/archive/css-data/test
